@@ -30,7 +30,9 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -41,15 +43,17 @@ import android.widget.ToggleButton;
 public class Demotable extends Activity {
     String myJSON;
     String decryptedString2;
-    String decryptedString1;
+    String decryptedString1,currentdatabase,seedValue;
     String sendLEDvalue;
     int ledstsatus,devicesatus;
+    EditText ID;
     TextView txtView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demotable);
         txtView = (TextView) findViewById(R.id.textView23);
+      //  ID =(EditText)findViewById(R.id.editTextID);
         ToggleButton toggle = (ToggleButton) findViewById(R.id.toggleButton3);
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -73,13 +77,34 @@ public class Demotable extends Activity {
             }
         });
     }
+    public void onRadioButtonClicked111(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radioButton111:
+                if (checked)
+                    seedValue="YourKey";
+                currentdatabase="http://112.133.242.248/mypage/selectall.php";
+                Toast.makeText(getApplicationContext(), "DeviceID 111 Select",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.radioButton222:
+                if (checked)
+                    seedValue="YourKey1";
+                currentdatabase="http://112.133.242.248/mypage1/selectall1.php";
+                Toast.makeText(getApplicationContext(), "DeviceID 222 Select",Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+    }
     public void get(View view) {
+
         class GetDataJSON extends AsyncTask<String, Void, String> {
 
             @Override
             protected String doInBackground(String... params) {
                 DefaultHttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
-                HttpPost httppost = new HttpPost("http://112.133.242.248/mypage/selectall.php");
+                HttpPost httppost = new HttpPost(currentdatabase);
                 // Depends on your web service
                 httppost.setHeader("Content-type", "application/json");
 
@@ -156,26 +181,14 @@ public class Demotable extends Activity {
                 TextView textViewID = new TextView(this);
                 textViewID.setText(""+json_data.getInt("DeviceID"));
                 tr.addView(textViewID);
-//
-//                TextView textViewLatitude = new TextView(this);
-//                decryptedString1 = decryption(""+json_data.getString("Latitude"));
-//                textViewLatitude.setText(decryptedString1);
-//                Log.i("Decryption1",decryptedString1);
-//                tr.addView(textViewLatitude);
-//
-//                TextView textViewLongitude = new TextView(this);
-//                decryptedString2 = decryption(""+json_data.getString("Longitude"));
-//                textViewLongitude.setText(decryptedString2);
-//                Log.i("Decryption2",decryptedString2);
-//                tr.addView(textViewLongitude);
 
                 TextView textViewAdd = new TextView(this);
-                decryptedString1 = decryption(""+json_data.getString("Latitude"));
-                decryptedString2 = decryption(""+json_data.getString("Longitude"));
-                String Add = getAddress(Double.parseDouble(decryptedString1),Double.parseDouble(decryptedString2));
-                textViewAdd.setText(Add);
-                tr.addView(textViewAdd);
-                System.out.println(Add);
+                    decryptedString1 = decryption("" + json_data.getString("Latitude"));
+                    decryptedString2 = decryption("" + json_data.getString("Longitude"));
+                    String Add = getAddress(Double.parseDouble(decryptedString1), Double.parseDouble(decryptedString2));
+                    textViewAdd.setText(Add);
+                    tr.addView(textViewAdd);
+                    System.out.println(Add);
 
                 TextView textViewLED = new TextView(this);
                 textViewLED.setText(""+json_data.getInt("LED"));
@@ -225,7 +238,7 @@ public class Demotable extends Activity {
     }
 
     private String decryption(String s) {
-        String seedValue = "YourKey";
+       // String seedValue = "YourKey";
         String strDecryptedText="";
         String strEncryptedText =s;
         try {
@@ -253,4 +266,6 @@ public class Demotable extends Activity {
 
         return result.toString();
     }
+
+
 }

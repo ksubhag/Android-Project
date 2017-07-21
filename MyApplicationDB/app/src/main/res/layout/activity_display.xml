@@ -37,11 +37,11 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView12"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="98dp"
         android:onClick="onButtonClick"
-        android:text="View Location" />
+        android:text="View Location"
+        android:layout_below="@+id/rg_id"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp" />
 
     <TextView
         android:text="The View Location Button Shows current status of Device on Google Map."
@@ -53,5 +53,39 @@
         android:layout_marginTop="13dp"
         android:id="@+id/textView12"
         android:textAppearance="@style/TextAppearance.AppCompat" />
+
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView12"
+        android:layout_marginTop="18dp"
+        android:text="Enter Your Device ID:"
+        android:textAppearance="@style/TextAppearance.AppCompat" />
+
+    <RadioGroup
+        android:id="@+id/rg_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView24"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="47dp">
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="DeviceID 111" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="DeviceID 222" />
+    </RadioGroup>
 
 </RelativeLayout>

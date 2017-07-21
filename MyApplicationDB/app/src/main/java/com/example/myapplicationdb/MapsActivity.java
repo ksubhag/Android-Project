@@ -64,8 +64,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     GoogleApiClient mGoogleApiClient;
     TextView DistanceDuration;
     String myJSON;
-    String decryptedString1,decryptedString2;
+    String decryptedString1,decryptedString2,currentdatabase,seedValue;
     double num1,num2;
+    int idname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +138,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent i = getIntent();
         num1 = i.getDoubleExtra("e1",0);
         num2 = i.getDoubleExtra("e2",0);
+        idname =i.getIntExtra("e3",111);
+
+        if (idname ==111){
+            seedValue = "YourKey";
+            currentdatabase="http://112.133.242.248/mypage/selectall.php";
+        }
+        else if (idname == 222){
+            seedValue = "YourKey1";
+            currentdatabase="http://112.133.242.248/mypage1/selectall1.php";
+        }
 
         LatLng latLng = new LatLng(num1,num2);
         mMap.addCircle(new CircleOptions()
@@ -212,7 +223,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     protected String doInBackground(String... params) {
                         DefaultHttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
-                        HttpPost httppost = new HttpPost("http://112.133.242.248/mypage/selectall.php");
+                        HttpPost httppost = new HttpPost(currentdatabase);
                         // Depends on your web service
                         httppost.setHeader("Content-type", "application/json");
                         InputStream inputStream = null;
@@ -337,7 +348,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private String decryption(String s) {
-        String seedValue = "YourKey";
+        //String seedValue = "YourKey";
         String strDecryptedText="";
         String strEncryptedText =s;
         try {

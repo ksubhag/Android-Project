@@ -5,6 +5,7 @@ package com.example.myapplicationdb;
  */
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -23,6 +24,8 @@ import java.net.URLEncoder;
 
 public class BackgroundTask extends AsyncTask<String,Void,String> {
 
+    String currentdatabase;
+
     public Context context;
     public AlertDialog alertDialog;
     BackgroundTask (Demotable ctx) {
@@ -32,10 +35,20 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
         context = (Context) ctx;
     }
     @Override
+    protected void onPreExecute() {
+        alertDialog = new AlertDialog.Builder(context).create();
+        Log.i("DATA","Baground Task");
+//        Intent i = getIntent();
+//        id = i.getIntExtra("e1",0);
+
+    }
+
+
+    @Override
     protected String doInBackground(String... params) {
         String type = params[0];
         String send_url = "http://112.133.242.248/mypage/sendledvalue.php";
-        String setting_url = "http://112.133.242.248/mypage/sendsettingvalue.php";
+        //String setting_url = "http://112.133.242.248/mypage/sendsettingvalue.php";
         if (type.equals("senddata")) {
             try {
                 String Relay = params[1];
@@ -75,7 +88,15 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             try {
                 String Interval = params[1];
                 String distance = params[2];
-                URL url = new URL(setting_url);
+                String id = params[3];
+                int idname =Integer.parseInt(id);
+                if (idname ==111){
+                    currentdatabase="http://112.133.242.248/mypage/sendsettingvalue.php";
+                }
+                else if (idname == 222){
+                    currentdatabase="http://112.133.242.248/mypage1/sendsettingvalue.php";
+                }
+                URL url = new URL(currentdatabase);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoOutput(true);
@@ -108,11 +129,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
         }
         return null;
     }
-    @Override
-    protected void onPreExecute() {
-        alertDialog = new AlertDialog.Builder(context).create();
-        Log.i("DATA","Baground Task");
-    }
+
 
     @Override
     protected void onPostExecute(String result) {

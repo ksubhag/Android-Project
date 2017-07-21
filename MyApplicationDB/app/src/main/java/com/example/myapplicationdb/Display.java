@@ -9,6 +9,10 @@ import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -25,20 +29,49 @@ import java.io.InputStreamReader;
 
 public class Display extends Activity {
 
+    EditText ID;
     String myJSON;
-    String decryptedString1,decryptedString2;
+    String decryptedString1,decryptedString2,currentdatabase,seedValue,id;
+    RadioGroup rg;
+    RadioButton rb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display);
+//        ID =(EditText)findViewById(R.id.editText11);
+        rg =(RadioGroup)findViewById(R.id.rg_id);
+    }
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radioButton:
+                if (checked)
+                    seedValue="YourKey";
+                    currentdatabase="http://112.133.242.248/mypage/selectall.php";
+                    id = "111";
+                    Toast.makeText(getApplicationContext(), "DeviceID 111 Select",Toast.LENGTH_SHORT).show();
+                    break;
+            case R.id.radioButton2:
+                if (checked)
+                    seedValue="YourKey1";
+                    currentdatabase="http://112.133.242.248/mypage1/selectall1.php";
+                    id = "222";
+                    Toast.makeText(getApplicationContext(), "DeviceID 222 Select",Toast.LENGTH_SHORT).show();
+                    break;
+        }
     }
     public void onButtonClick(View v) {
+
                 class GetDataJSON extends AsyncTask<String, Void, String> {
 
                     @Override
                     protected String doInBackground(String... params) {
                         DefaultHttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
-                        HttpPost httppost = new HttpPost("http://112.133.242.248/mypage/selectall.php");
+                        HttpPost httppost = new HttpPost(currentdatabase);
+                      // HttpPost httppost = new HttpPost("http://112.133.242.248/mypage/selectall.php");
                         // Depends on your web service
                         httppost.setHeader("Content-type", "application/json");
 
@@ -85,6 +118,7 @@ public class Display extends Activity {
 
                     i.putExtra("e1", d1);
                     i.putExtra("e2", d2);
+                    i.putExtra("e3",id);
                     startActivity(i);
                 }
     }
@@ -106,7 +140,7 @@ public class Display extends Activity {
         }
     }
     private String decryption(String s) {
-        String seedValue = "YourKey";
+       // seedValue = "YourKey";
         String strDecryptedText="";
         String strEncryptedText =s;
         try {
@@ -116,7 +150,4 @@ public class Display extends Activity {
         }
         return strDecryptedText;
     }
-
-
-
 }
